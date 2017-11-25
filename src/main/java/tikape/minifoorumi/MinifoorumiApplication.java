@@ -22,14 +22,14 @@ public class MinifoorumiApplication {
         Spark.get("/messages", (req, res) -> {
             HashMap map = new HashMap<>();
             map.put("viestit", viestit.findAll());
-            map.put("viestiketjut", viestiketjut.findAll());
+            map.put("viestiketjut", viestiketjut.findAllAndReorder());
             return new ModelAndView(map, "messages");
         }, new ThymeleafTemplateEngine());
         
         Spark.get("/messages/:id", (req, res) -> {
            Integer viestiketjuId = Integer.parseInt(req.params(":id"));
            HashMap map = new HashMap<>();
-           map.put("viestit", viestit.findAll()); // todo: vain tämän ketjun viestit
+           map.put("viestit", viestit.findAllFromThread(viestiketjuId)); // todo: vain tämän ketjun viestit
            map.put("viestiketju", viestiketjut.findOne(viestiketjuId));
            return new ModelAndView(map, "message");
         }, new ThymeleafTemplateEngine());

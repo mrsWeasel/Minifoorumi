@@ -3,6 +3,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import tikape.minifoorumi.database.Database;
 import tikape.minifoorumi.domain.Viestiketju;
 
@@ -34,6 +36,26 @@ public class ViestiketjuDao extends AbstractNamedObjectDao<Viestiketju> {
             conn.close();
             return viestiketju;
         }
+    }
+    
+    public List<Viestiketju> findAllAndReorder() throws SQLException {
+        List<Viestiketju> viestit = new ArrayList<>();
+
+        try (Connection conn = database.getConnection()) {
+            PreparedStatement stmt = conn.prepareStatement(
+                    "SELECT * FROM Viestiketju "
+                    + "LEFT JOIN Viesti ON Viestiketju.id = Viesti.viestiketju_id "
+                    + "GROUP BY Viestiketju.id "
+                    + "ORDER BY Viesti.aika DESC");
+            
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                viestit.add(createFromRow(rs));
+            }
+        }
+
+        return viestit;
     }
     
     @Override
