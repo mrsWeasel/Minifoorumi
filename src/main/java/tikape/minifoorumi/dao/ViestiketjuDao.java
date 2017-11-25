@@ -22,13 +22,13 @@ public class ViestiketjuDao extends AbstractNamedObjectDao<Viestiketju> {
             // Haetaan viestiketju, jonka aihe täsmää ja joka ei sisällä vielä viestejä (siltä varalta,
             // että useammalla ketjulla onkin sama aihe)
             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Viestiketju WHERE aihe = ? "
-                    + "AND id NOT IN (SELECT * FROM Viesti)");
+                    + "AND id NOT IN (SELECT viestiketju_id FROM Viesti)");
             stmt.setString(1, aihe);
             ResultSet rs = stmt.executeQuery();
             
             rs.next();
             
-            Viestiketju viestiketju = new Viestiketju(rs.getInt("id"), rs.getString("aine"));
+            Viestiketju viestiketju = new Viestiketju(rs.getInt("id"), rs.getString("aihe"));
             return viestiketju;
         }
     }
