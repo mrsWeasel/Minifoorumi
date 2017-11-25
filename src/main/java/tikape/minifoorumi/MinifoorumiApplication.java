@@ -42,9 +42,10 @@ public class MinifoorumiApplication {
                 java.util.Date utilAika = new java.util.Date();
                 java.sql.Date sqlAika = new java.sql.Date( utilAika.getTime() );
                 Viestiketju viestiketju = new Viestiketju(null, req.queryParams("topic"));
-                viestiketjut.save(viestiketju);
+                
+                Viestiketju vk = viestiketjut.save(viestiketju);
                 // todo: vaihda tähän uuden ketjun id
-                Viesti viesti = new Viesti(null, 1, req.queryParams("name"), req.queryParams("content"), sqlAika);
+                Viesti viesti = new Viesti(null, vk.getId(), req.queryParams("name"), req.queryParams("content"), sqlAika);
                 viestit.save(viesti);
                 //TODO: res.redirect("/messages/" + req.params(":id"));
                 res.redirect("/messages");
