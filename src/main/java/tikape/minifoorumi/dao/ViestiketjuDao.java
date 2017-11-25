@@ -29,6 +29,8 @@ public class ViestiketjuDao extends AbstractNamedObjectDao<Viestiketju> {
             rs.next();
             
             Viestiketju viestiketju = new Viestiketju(rs.getInt("id"), rs.getString("aihe"));
+            stmt.close();
+            conn.close();
             return viestiketju;
         }
     }
