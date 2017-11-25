@@ -1,0 +1,31 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+    <head>
+        <title>Messages</title>
+        <meta charset="utf-8" />
+    </head>
+
+    <body>
+        <h1>Messages <a href="#addnew">Add new</a></h1>
+
+        <ul>
+            <li th:each="viestiketju : ${viestiketjut}">
+                <span th:text="${viestiketju.aihe}">Aihe</span>
+            </li>
+        </ul>
+
+
+        <h2 id="addnew">Add new message</h2>
+
+        <form method="POST" action="/messages">
+            <label for="name">Your name</label>
+            <input type="text" name="name"/><br/>
+            <label for="topic">Topic</label>
+            <input type="text" name="topic"/><br/>
+            <label for="content">Message</label>
+            <textarea name="content"></textarea><br/>
+            <input type="submit" value="Add!"/>
+        </form>
+    </body>
+</html>
