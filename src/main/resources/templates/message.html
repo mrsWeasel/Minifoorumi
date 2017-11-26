@@ -2,26 +2,43 @@
 <html>
 
     <head>
-        <title>TODO supply a title</title>
+        <title th:text="${viestiketju.aihe}">Thread</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="css/styles.css"/>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
     </head>
     <body>
-        <h1 th:text="${viestiketju.aihe}"></h1>
-        <ul>
-            <li th:each="viesti : ${viestit}">
-                <span th:text="${viesti.sisalto}">Sisältö</span>
-                <span th:text="${viesti.kirjoittaja}">Kirjoittaja</span>
-            </li>
-        </ul>
-        <form method="POST" th:action="@{~/messages/{id}(id=${viestiketju.id})}">
-            <label for="name">Your name</label>
-            <input type="text" name="name"/><br/>
-            <label for="content">Message</label>
-            <textarea name="content"></textarea><br/>
-            <input type="hidden" name="viestiketju_id" th:value="${viestiketju.id}"/>
-            <input type="submit" value="Add!"/>
-        </form>
+        <div class="container">
+            <div class="col-md-12">
+                <a href="/messages">< Back</a>
+            </div>
+            <div class="col-md-12">
+                <h1 th:text="${viestiketju.aihe}"></h1>
+            </div>
+            <div class="col-md-8">
+                <ul class="list-group">
+                    <li class="list-group-item" th:each="viesti : ${viestit}">
+                            <span th:text="${viesti.sisalto}">Sisältö</span><br/>
+                            <span>T: </span>
+                            <span th:text="${viesti.kirjoittaja}">Kirjoittaja</span>
+                        <br>
+                    </li>
+                </ul>
+            
+                <h2>Add message to "<span th:text="${viestiketju.aihe}">Aihe</span>"</h2>
+                <form method="POST" th:action="@{~/messages/{id}(id=${viestiketju.id})}">
+                    <div class="form-group">
+                        <label for="name">Your name</label>
+                        <input type="text" name="name" class="form-control"/><br/>
+                    </div>
+                    <div class="form-group">
+                        <label for="content">Message</label>
+                        <textarea name="content" class="form-control" rows="10"></textarea><br/>
+                    </div>    
+                    <input type="hidden" name="viestiketju_id" th:value="${viestiketju.id}"/>
+                    <input type="submit" value="Add!" class="btn btn-primary"/>
+                </form>
+            </div>
+        </div>
     </body>
 </html>

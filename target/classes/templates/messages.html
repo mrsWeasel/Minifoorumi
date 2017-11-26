@@ -2,33 +2,46 @@
 <html>
 
     <head>
-        <title>Messages</title>
+        <title>Forum</title>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
     </head>
 
     <body>
-        <h1>Messages</h1>
-        <a href="#addnew">Add new</a>
-        <ul>
-            <li th:each="viestiketju : ${viestiketjut}">
-                
-                <span th:text="${viestiketju.aihe}">Aihe</span>
-               
-            </li>
-        </ul>
+        <div class="container">
+            <div class="col-md-12">
+                <h1>Forum</h1>
+            </div>
+            <div class="col-md-8">
+            <ul class="list-group">
+                <li class="list-group-item" th:each="viestiketju : ${viestiketjut}">
+                    <a th:href="@{~/messages/{id}(id=${viestiketju.id})}">
+                        <span th:text="${viestiketju.aihe}">Aihe</span>
+                    </a>
+                    <span th:text="${viestiketju.viestimaara}" class="badge">1</span>
+                </li>
+            </ul>
+            </div>
+            <div class="col-md-4">
+                <h2 id="addnew">Start new conversation</h2>
 
-
-        <h2 id="addnew">Add new message</h2>
-
-        <form method="POST" action="/messages">
-            <label for="name">Your name</label>
-            <input type="text" name="name"/><br/>
-            <label for="topic">Topic</label>
-            <input type="text" name="topic"/><br/>
-            <label for="content">Message</label>
-            <textarea name="content"></textarea><br/>
-            <input type="submit" value="Add!"/>
-        </form>
+                <form method="POST" action="/messages">
+                    <div class="form-group">    
+                        <label for="name">Your name</label>
+                        <input class="form-control" type="text" name="name"/><br/>
+                    </div>
+                    <div class="form-group"> 
+                        <label for="topic">Topic</label>
+                        <input class="form-control" type="text" name="topic"/><br/>
+                    </div>
+                    <div class="form-group"> 
+                        <label for="content">Message</label>
+                        <textarea class="form-control" name="content"></textarea><br/>
+                    </div>    
+                        <input type="submit" value="Add!" class="btn btn-primary"/>
+                    </form>
+                </div>
+            </div>
     </body>
 </html>

@@ -23,6 +23,8 @@ public class MinifoorumiApplication {
             HashMap map = new HashMap<>();
             map.put("viestit", viestit.findAll());
             map.put("viestiketjut", viestiketjut.findAllAndReorder());
+            
+            
             return new ModelAndView(map, "messages");
         }, new ThymeleafTemplateEngine());
         
@@ -48,7 +50,8 @@ public class MinifoorumiApplication {
         Spark.post("/messages", (req, res) -> {
                 java.util.Date utilAika = new java.util.Date();
                 java.sql.Date sqlAika = new java.sql.Date( utilAika.getTime() );
-                Viestiketju viestiketju = new Viestiketju(null, req.queryParams("topic"));
+                
+                Viestiketju viestiketju = new Viestiketju(null, req.queryParams("topic"), 1);
                 
                 Viestiketju vk = viestiketjut.save(viestiketju);
                 // todo: vaihda tähän uuden ketjun id

@@ -16,7 +16,8 @@ public class ViestiketjuDao extends AbstractNamedObjectDao<Viestiketju> {
 
     @Override
     public Viestiketju createFromRow(ResultSet resultSet) throws SQLException {
-        return new Viestiketju(resultSet.getInt("id"), resultSet.getString("aihe"));
+        Integer viestimaara = getMessageCount(resultSet.getInt("id"));
+        return new Viestiketju(resultSet.getInt("id"), resultSet.getString("aihe"), viestimaara);
     }
     
     public Viestiketju findCreated(String aihe) throws SQLException {
@@ -29,12 +30,29 @@ public class ViestiketjuDao extends AbstractNamedObjectDao<Viestiketju> {
             ResultSet rs = stmt.executeQuery();
             
             rs.next();
-            
-            Viestiketju viestiketju = new Viestiketju(rs.getInt("id"), rs.getString("aihe"));
+            Integer viestimaara = getMessageCount(rs.getInt("id"));
+            Viestiketju viestiketju = new Viestiketju(rs.getInt("id"), rs.getString("aihe"), viestimaara);
             stmt.close();
             rs.close();
             conn.close();
             return viestiketju;
+        }
+    }
+    
+    public Integer getMessageCount(Integer key) throws SQLException {
+        
+        try (Connection conn = database.getConnection()) {
+            Integer count;
+            PreparedStatement stmt = conn.prepareStatement(
+                "SELECT COUNT(*) AS count FROM Viesti WHERE viestiketju_id = ?");
+                stmt.setInt(1, key);
+                ResultSet rs = stmt.executeQuery();
+                
+                rs.next();
+                count = rs.getInt("count");
+                return count;
+
+                
         }
     }
     
@@ -43,8 +61,8 @@ public class ViestiketjuDao extends AbstractNamedObjectDao<Viestiketju> {
 
         try (Connection conn = database.getConnection()) {
             PreparedStatement stmt = conn.prepareStatement(
-                    "SELECT * FROM Viestiketju "
-                    + "LEFT JOIN Viesti ON Viestiketju.id = Viesti.viestiketju_id "
+                    "SELECT * FROM Viestiketju, Viesti "
+                    + "WHERE Viestiketju.id = Viesti.viestiketju_id "
                     + "GROUP BY Viestiketju.id "
                     + "ORDER BY Viesti.aika DESC");
             
@@ -53,8 +71,11 @@ public class ViestiketjuDao extends AbstractNamedObjectDao<Viestiketju> {
             while (rs.next()) {
                 viestit.add(createFromRow(rs));
             }
+            stmt.close();
+            rs.close();
+            conn.close();
         }
-
+        
         return viestit;
     }
     
